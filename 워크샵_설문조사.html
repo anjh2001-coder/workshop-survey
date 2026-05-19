@@ -344,14 +344,11 @@ async function submitAndShow(){
   const nb=document.getElementById('btn-next');
   nb.disabled=true; nb.textContent='제출 중...';
   try{
-    await fetch(SCRIPT_URL,{
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        name:A.name, dept:A.dept||'', departure:A['q-dep']||'',
-        team:A['q-team']||'', spots:[...spots].join(', ')
-      })
+    const p=new URLSearchParams({
+      name:A.name, dept:A.dept||'', departure:A['q-dep']||'',
+      team:A['q-team']||'', spots:[...spots].join(', ')
     });
+    await fetch(SCRIPT_URL+'?'+p.toString(),{method:'GET',mode:'no-cors'});
   }catch(e){console.error(e);}
   nb.disabled=false; submitting=false;
   showResult();
