@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>창립 40주년 제주 워크샵 참가 설문</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2B5E;
+    --blue: #2C5282;
+    --sky: #EBF4FF;
+    --green: #EAF3DE;
+    --amber: #FEF3C7;
+    --red: #FEE2E2;
+    --white: #fff;
+    --off: #F7F6F3;
+    --border: #E5E2DA;
+    --text: #1A1A18;
+    --mid: #6B6860;
+    --light: #FAF9F7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--off);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+  .container { max-width: 680px; margin: 0 auto; }
+
+  /* 헤더 */
+  .hero {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 36px 36px 28px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero-tag { font-size: 11px; color: #93C5FD; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+  .hero h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 24px; font-weight: 600;
+    color: #fff; line-height: 1.45; margin-bottom: 8px;
+  }
+  .hero-sub { font-size: 13px; color: #CADCFC; line-height: 1.7; margin-bottom: 20px; }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 11px; color: #CADCFC; background: rgba(255,255,255,0.1); border: .5px solid rgba(255,255,255,0.2); padding: 4px 11px; border-radius: 99px; }
+
+  /* 진행바 */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: var(--mid); margin-bottom: 6px; }
+  .progress-track { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--navy); border-radius: 99px; transition: width .4s ease; }
+
+  /* 카드 */
+  .card {
+    background: var(--white);
+    border: .5px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 10px;
+  }
+
+  /* 스텝 */
+  .step { display: none; }
+  .step.active { display: block; }
+  .q-num { font-size: 10px; font-weight: 500; color: var(--mid); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+  .q-text { font-family: 'Noto Serif KR', serif; font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 4px; }
+  .q-hint { font-size: 12px; color: var(--mid); margin-bottom: 18px; }
+
+  /* 입력 */
+  .fields { display: flex; flex-direction: column; gap: 10px; }
+  .field label { display: block; font-size: 11px; font-weight: 500; color: var(--mid); margin-bottom: 5px; letter-spacing: .03em; }
+  input[type=text], textarea, select {
+    width: 100%; padding: 11px 14px;
+    border: .5px solid var(--border); border-radius: 10px;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 13px;
+    color: var(--text); background: var(--light);
+    outline: none; transition: border-color .15s;
+  }
+  input[type=text]:focus, textarea:focus { border-color: var(--navy); background: #fff; }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+
+  /* 라디오/체크 옵션 */
+  .opts { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 15px;
+    border: .5px solid var(--border); border-radius: 12px;
+    cursor: pointer; background: var(--light);
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .opt:hover { border-color: #A0AEC0; background: #fff; }
+  .opt.sel-single { border-color: var(--navy); background: var(--sky); }
+  .opt.sel-multi { border-color: #3B6D11; background: var(--green); }
+  .opt-mark {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; transition: all .15s;
+  }
+  .opt.sel-single .opt-mark { background: var(--navy); border-color: var(--navy); }
+  .opt.sel-multi .opt-mark { background: #3B6D11; border-color: #3B6D11; border-radius: 4px; }
+  .opt-mark::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; display: none; }
+  .opt.sel-single .opt-mark::after { display: block; }
+  .opt.sel-multi .opt-mark::after { display: block; width: 8px; height: 6px; border-radius: 0; background: none; border: 1.5px solid #fff; border-top: none; border-right: none; transform: rotate(-45deg) translate(1px,-1px); }
+  .opt-body { flex: 1; }
+  .opt-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .opt-desc { font-size: 11px; color: var(--mid); line-height: 1.5; }
+  .opt.sel-single .opt-label { color: var(--navy); }
+  .opt.sel-multi .opt-label { color: #2F5A0D; }
+
+  /* 관광지 그리드 */
+  .spot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .spot {
+    border: .5px solid var(--border); border-radius: 12px;
+    overflow: hidden; cursor: pointer;
+    background: var(--light); transition: border-color .15s, transform .15s;
+  }
+  .spot:hover { border-color: #A0AEC0; transform: translateY(-1px); }
+  .spot.sel-multi { border: 2px solid #3B6D11; }
+  .spot-img { width: 100%; height: 110px; object-fit: cover; display: block; background: #E2E8F0; }
+  .spot-body { padding: 10px 11px; }
+  .spot-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; display: flex; justify-content: space-between; align-items: center; }
+  .spot-chk { display: none; font-size: 10px; padding: 1px 6px; border-radius: 99px; background: #3B6D11; color: #fff; }
+  .spot.sel-multi .spot-chk { display: inline-block; }
+  .spot-desc { font-size: 11px; color: var(--mid); line-height: 1.5; }
+  .spot-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 99px; margin-top: 6px; font-weight: 500; }
+  .tag-g { background: var(--green); color: #2F5A0D; }
+  .tag-b { background: var(--sky); color: #1A4A8C; }
+  .tag-a { background: var(--amber); color: #7C4C0A; }
+
+  /* 네비게이션 */
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+  .btn {
+    height: 40px; padding: 0 22px;
+    border: .5px solid var(--border); border-radius: 10px;
+    background: var(--white); cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px; color: var(--text);
+    transition: background .15s;
+  }
+  .btn:hover { background: var(--off); }
+  .btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .btn-primary:hover { background: #253d82; }
+  .btn-primary:disabled { background: #8a97b8; border-color: #8a97b8; cursor: not-allowed; }
+  .step-dots { display: flex; gap: 5px; align-items: center; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all .3s; }
+  .dot.cur { width: 18px; border-radius: 3px; background: var(--navy); }
+  .dot.done { background: #93C5FD; }
+
+  /* 제출 로딩 오버레이 */
+  .submitting-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(27,43,94,0.55);
+    z-index: 999;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 14px;
+  }
+  .submitting-overlay.show { display: flex; }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .submitting-overlay p { color: #fff; font-size: 14px; }
+
+  /* 결과 */
+  .result-wrap { display: none; }
+  .result-hero {
+    background: var(--navy); border-radius: 20px;
+    padding: 32px; text-align: center; margin-bottom: 12px;
+  }
+  .result-icon { font-size: 36px; margin-bottom: 10px; }
+  .result-title { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .result-sub { font-size: 13px; color: #CADCFC; }
+  .res-card { background: var(--white); border: .5px solid var(--border); border-radius: 16px; padding: 20px 22px; margin-bottom: 10px; }
+  .res-sec { font-size: 10px; font-weight: 500; color: var(--mid); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: .5px solid var(--border); }
+  .res-row { display: flex; gap: 10px; padding: 6px 0; font-size: 13px; border-bottom: .5px solid var(--off); align-items: flex-start; }
+  .res-row:last-child { border-bottom: none; }
+  .res-lbl { color: var(--mid); min-width: 72px; flex-shrink: 0; }
+  .res-val { color: var(--text); font-weight: 500; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rtag { font-size: 12px; padding: 4px 10px; border-radius: 99px; background: var(--sky); color: #1A4A8C; border: .5px solid #B5D4F4; }
+  .rtag-green { background: var(--green); color: #2F5A0D; border-color: #A3D477; }
+  .note { font-size: 12px; color: var(--mid); text-align: center; margin-top: 8px; }
+  .btn-reset { display: block; margin: 12px auto 0; }
+
+  /* 에러 */
+  .err { font-size: 12px; color: #C53030; background: var(--red); padding: 8px 12px; border-radius: 8px; margin-top: 8px; display: none; }
+  .err.show { display: block; }
+
+  @media (max-width: 480px) {
+    .card { padding: 22px 18px 20px; }
+    .hero { padding: 28px 22px 22px; }
+    .spot-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 제출 로딩 오버레이 -->
+<div class="submitting-overlay" id="overlay">
+  <div class="spinner"></div>
+  <p>응답을 제출하는 중입니다...</p>
+</div>
+
+<div class="container">
+
+  <!-- 히어로 -->
+  <div class="hero">
+    <div class="hero-tag">창립 40주년 · 제주 워크샵 설문조사</div>
+    <h1>여러분의 선택으로<br>최고의 워크샵을 만듭니다</h1>
+    <div class="hero-sub">항공 예약 및 관광 일정 확정을 위한 설문입니다.<br>5분이면 완료됩니다 🙏</div>
+    <div class="hero-chips">
+      <span class="chip">📅 2026. 10. 17 ~ 19</span>
+      <span class="chip">👥 전 임직원 90명</span>
+      <span class="chip">📍 제주도</span>
+    </div>
+  </div>
+
+  <!-- 진행바 -->
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="p-txt">1 / 5 단계</span>
+      <span id="p-pct">20%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="p-bar" style="width:20%"></div></div>
+  </div>
+
+  <!-- 설문 -->
+  <div id="survey">
+
+    <!-- STEP 1: 기본 정보 -->
+    <div class="card step active" id="s1">
+      <div class="q-num">필수 항목 · 01</div>
+      <div class="q-text">기본 정보를 입력해 주세요</div>
+      <div class="q-hint">항공권 예약에 사용됩니다. 정확하게 입력해 주세요.</div>
+      <div class="fields">
+        <div class="field">
+          <label>성명</label>
+          <input type="text" id="f-name" placeholder="홍길동">
+        </div>
+        <div class="field">
+          <label>소속 부서</label>
+          <input type="text" id="f-dept" placeholder="인사총무팀">
+        </div>
+        <div class="field">
+          <label>생년월일 (항공권 예약용)</label>
+          <input type="text" id="f-dob" placeholder="1985.03.15">
+        </div>
+      </div>
+      <div class="err" id="err1">성명을 입력해 주세요.</div>
+    </div>
+
+    <!-- STEP 2: 출발지 -->
+    <div class="card step" id="s2">
+      <div class="q-num">필수 항목 · 02</div>
+      <div class="q-text">출발 지역을 선택해 주세요</div>
+      <div class="q-hint">항공편이 지역별로 상이합니다. 본인 출발지를 선택해 주세요.</div>
+      <div class="opts" id="q-dep">
+        <div class="opt" onclick="single(this,'q-dep')">
+          <div class="opt-mark"></div>
+          <div class="opt-body">
+            <div class="opt-label">✈ 김포 출발</div>
+            <div class="opt-desc">이스타항공 07:35 출발 → 제주 08:50 도착</div>
+          </div>
+        </div>
+        <div class="opt" onclick="single(this,'q-dep')">
+          <div class="opt-mark"></div>
+          <div class="opt-body">
+            <div class="opt-label">✈ 대구 출발</div>
+            <div class="opt-desc">제주항공 08:10 출발 → 제주 09:15 도착</div>
+          </div>
+        </div>
+        <div class="opt" onclick="single(this,'q-dep')">
+          <div class="opt-mark"></div>
+          <div class="opt-body">
+            <div class="opt-label">✈ 부산 출발</div>
+            <div class="opt-desc">제주항공 08:00 출발 → 제주 09:05 도착</div>
+          </div>
+        </div>
+      </div>
+      <div class="err" id="err2">출발 지역을 선택해 주세요.</div>
+    </div>
+
+    <!-- STEP 3: 골프/관광 -->
+    <div class="card step" id="s3">
+      <div class="q-num">필수 항목 · 03</div>
+      <div class="q-text">1일차 프로그램을 선택해 주세요</div>
+      <div class="q-hint">선택하신 내용으로 예약이 진행됩니다.</div>
+      <div class="opts" id="q-team">
+        <div class="opt" onclick="single(this,'q-team')">
+          <div class="opt-mark"></div>
+          <div class="opt-body">
+            <div class="opt-label">⛳ 골프팀</div>
+            <div class="opt-desc">아덴힐CC 라운딩 · 클럽하우스 중식 포함 · 카트비·캐디피 현장 지불</div>
+          </div>
+        </div>
+        <div class="opt" onclick="single(this,'q-team')">
+          <div class="opt-mark"></div>
+          <div class="opt-body">
+            <div class="opt-label">🌊 관광팀</div>
+            <div class="opt-desc">제주 명소 탐방 · 현지 중식 포함 · 세부 코스는 아래 선호도 반영</div>
+          </div>
+        </div>
+      </div>
+      <div class="err" id="err3">프로그램을 선택해 주세요.</div>
+    </div>
+
+    <!-- STEP 4: 관광지 선호도 -->
+    <div class="card step" id="s4">
+      <div class="q-num">관광팀 대상 · 04</div>
+      <div class="q-text">가고 싶은 관광지를 선택해 주세요</div>
+      <div class="q-hint">복수 선택 가능 · 결과를 반영해 최종 코스를 확정합니다</div>
+      <div class="spot-grid" id="q-tour">
+
+        <div class="spot" onclick="spotToggle(this,'카멜리아힐')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20181016/FF191038-A1A7-4189-A55C-D2C21893EDB2.jpg" alt="카멜리아힐" onerror="this.style.background='#EAF3DE';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">카멜리아힐 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">동백나무 6만 그루가 만든 숲길. 계절 꽃 정원과 유럽풍 포토존</div>
+            <span class="spot-tag tag-g">자연·산책</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'오설록')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20181016/22CB4A23-E5E5-4B11-A23E-7C0D85D1538B.jpg" alt="오설록" onerror="this.style.background='#EAF3DE';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">오설록 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">끝없이 펼쳐진 제주 녹차밭과 티 뮤지엄. 녹차 소프트아이스크림</div>
+            <span class="spot-tag tag-g">자연·문화</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'제트보트')">
+          <img class="spot-img" src="https://ldb-phinf.pstatic.net/20190614_250/1560481846408jrBAO_JPEG/7H7A9282.jpg" alt="제트보트" onerror="this.style.background='#EBF4FF';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">제트보트 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">대포 주상절리 절경과 함께 360도 스핀을 즐기는 해양 액티비티</div>
+            <span class="spot-tag tag-b">액티비티</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'허니문하우스')">
+          <img class="spot-img" src="https://ldb-phinf.pstatic.net/20220606_50/16545069518516G9pI_JPEG/KakaoTalk_20220527_110702532_09.jpg" alt="허니문하우스" onerror="this.style.background='#EBF4FF';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">허니문하우스 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">소정방폭포가 내려다보이는 감성 카페. 미니 둘레길과 전시</div>
+            <span class="spot-tag tag-b">카페·뷰</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'감귤따기 체험')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20220914/PH_20220914093600865.jpg" alt="감귤따기 체험" onerror="this.style.background='#FEF3C7';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">감귤따기 체험 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">직접 따는 신선한 감귤 시식과 수확. 3일차 귀경 전 마지막 추억</div>
+            <span class="spot-tag tag-a">체험</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'성산일출봉')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20181016/3B2A0DB8-0CE8-4437-886B-D7DCFED8C543.jpg" alt="성산일출봉" onerror="this.style.background='#EBF4FF';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">성산일출봉 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">유네스코 세계자연유산. 해발 182m에서 바라보는 파노라마 절경</div>
+            <span class="spot-tag tag-g">자연·등반</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'애월 카페거리')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20200812/PH_20200812163826830.jpg" alt="애월 카페거리" onerror="this.style.background='#EBF4FF';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">애월 카페거리 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">제주 서쪽 해안을 따라 늘어선 감성 카페 거리. 에메랄드 바다 뷰</div>
+            <span class="spot-tag tag-b">카페·뷰</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'산방산 유람선')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20190403/PH_20190403142228936.jpg" alt="산방산 유람선" onerror="this.style.background='#EBF4FF';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">산방산 유람선 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">산방산·용머리해안을 바다 위에서 감상. 제주 남서부 해안 절경</div>
+            <span class="spot-tag tag-b">해양·관광</span>
+          </div>
+        </div>
+
+        <div class="spot" onclick="spotToggle(this,'더마파크')">
+          <img class="spot-img" src="https://cdn.visitjeju.net/photo/20181016/C8B0A8EA-53BB-41CA-BB4D-B7E95568C1B7.jpg" alt="더마파크" onerror="this.style.background='#FEF3C7';this.src=''">
+          <div class="spot-body">
+            <div class="spot-name">더마파크 <span class="spot-chk">✓</span></div>
+            <div class="spot-desc">승마 공연과 마상 무예의 제주 대표 문화 공연. 단체 관람 최적</div>
+            <span class="spot-tag tag-a">공연·체험</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STEP 5: 자유 의견 -->
+    <div class="card step" id="s5">
+      <div class="q-num">자유 기재 · 05</div>
+      <div class="q-text">건의사항이 있으시면 적어주세요</div>
+      <div class="q-hint">음식 알레르기, 건강 특이사항, 워크샵 관련 건의사항 등 무엇이든 환영합니다 😊</div>
+      <textarea id="q-free" placeholder="자유롭게 작성해 주세요..."></textarea>
+    </div>
+
+    <!-- 네비게이션 -->
+    <div class="nav">
+      <button class="btn" id="btn-prev" onclick="prev()" style="visibility:hidden">← 이전</button>
+      <div class="step-dots" id="dots"></div>
+      <button class="btn btn-primary" id="btn-next" onclick="next()">다음 →</button>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div class="result-wrap" id="result">
+    <div class="result-hero">
+      <div class="result-icon">🎉</div>
+      <div class="result-title">응답이 완료되었습니다!</div>
+      <div class="result-sub">소중한 의견 감사합니다. 인사총무팀에서 취합 후 일정에 반영합니다.</div>
+    </div>
+
+    <div class="res-card" id="r-info"></div>
+    <div class="res-card" id="r-team"></div>
+    <div class="res-card" id="r-tour" style="display:none"></div>
+    <div class="res-card" id="r-free" style="display:none"></div>
+
+    <p class="note">인사총무팀 내선 452로 문의해 주세요</p>
+    <button class="btn btn-reset" onclick="restart()">↺ 다시 응답하기</button>
+  </div>
+
+</div>
+
+<script>
+// ⚠️ Google Apps Script 배포 후 아래 URL을 교체하세요
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdeLzu59vG27bmfHZ2YQUjZsn6uKTwqHxErNtFIpHLEyEIIOyPJ0ZKscRn733LN4YHsQ/exec';
+
+const TOTAL = 5;
+let cur = 1;
+const A = {};
+const spots = new Set();
+let submitting = false;
+
+function single(el, gid) {
+  document.querySelectorAll('#' + gid + ' .opt').forEach(o => o.classList.remove('sel-single'));
+  el.classList.add('sel-single');
+  A[gid] = el.querySelector('.opt-label').textContent.replace(/^[^\w가-힣]+/, '').trim();
+}
+
+function spotToggle(el, name) {
+  if (spots.has(name)) { spots.delete(name); el.classList.remove('sel-multi'); }
+  else { spots.add(name); el.classList.add('sel-multi'); }
+}
+
+function updUI() {
+  const pct = Math.round(cur / TOTAL * 100);
+  document.getElementById('p-bar').style.width = pct + '%';
+  document.getElementById('p-txt').textContent = cur + ' / ' + TOTAL + ' 단계';
+  document.getElementById('p-pct').textContent = pct + '%';
+  document.getElementById('btn-prev').style.visibility = cur > 1 ? 'visible' : 'hidden';
+  const nb = document.getElementById('btn-next');
+  nb.textContent = cur === TOTAL ? '제출 ✓' : '다음 →';
+  const dc = document.getElementById('dots');
+  dc.innerHTML = Array.from({length: TOTAL}, (_, i) =>
+    `<div class="dot ${i+1===cur?'cur':i+1<cur?'done':''}"></div>`).join('');
+}
+
+function clearErr() {
+  document.querySelectorAll('.err').forEach(e => e.classList.remove('show'));
+}
+
+function next() {
+  clearErr();
+  if (cur === 1) {
+    if (!document.getElementById('f-name').value.trim()) {
+      document.getElementById('err1').textContent = '성명을 입력해 주세요.';
+      document.getElementById('err1').classList.add('show'); return;
+    }
+    A.name = document.getElementById('f-name').value.trim();
+    A.dept = document.getElementById('f-dept').value.trim();
+    A.dob  = document.getElementById('f-dob').value.trim();
+  }
+  if (cur === 2 && !document.querySelector('#q-dep .sel-single')) {
+    document.getElementById('err2').classList.add('show'); return;
+  }
+  if (cur === 3 && !document.querySelector('#q-team .sel-single')) {
+    document.getElementById('err3').classList.add('show'); return;
+  }
+  if (cur < TOTAL) {
+    document.getElementById('s' + cur).classList.remove('active');
+    cur++;
+    document.getElementById('s' + cur).classList.add('active');
+    updUI();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } else {
+    A.free = document.getElementById('q-free').value.trim();
+    submitAndShow();
+  }
+}
+
+function prev() {
+  if (cur > 1) {
+    document.getElementById('s' + cur).classList.remove('active');
+    cur--;
+    document.getElementById('s' + cur).classList.add('active');
+    updUI();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
+async function submitAndShow() {
+  if (submitting) return;
+  submitting = true;
+
+  const nb = document.getElementById('btn-next');
+  nb.disabled = true;
+  document.getElementById('overlay').classList.add('show');
+
+  const payload = {
+    name:      A.name,
+    dept:      A.dept || '',
+    dob:       A.dob  || '',
+    departure: A['q-dep']  || '',
+    team:      A['q-team'] || '',
+    spots:     [...spots].join(', '),
+    free:      A.free || ''
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    console.error('제출 오류:', e);
+  }
+
+  document.getElementById('overlay').classList.remove('show');
+  nb.disabled = false;
+  submitting = false;
+  showResult();
+}
+
+function showResult() {
+  document.getElementById('survey').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+
+  document.getElementById('r-info').innerHTML = `
+    <div class="res-sec">기본 정보</div>
+    <div class="res-row"><span class="res-lbl">성명</span><span class="res-val">${A.name}</span></div>
+    <div class="res-row"><span class="res-lbl">소속</span><span class="res-val">${A.dept || '—'}</span></div>
+    <div class="res-row"><span class="res-lbl">생년월일</span><span class="res-val">${A.dob || '—'}</span></div>
+    <div class="res-row"><span class="res-lbl">출발지</span><span class="res-val">${A['q-dep'] || '—'}</span></div>`;
+
+  const isGolf = (A['q-team'] || '').includes('골프');
+  document.getElementById('r-team').innerHTML = `
+    <div class="res-sec">1일차 프로그램</div>
+    <div class="res-row"><span class="res-lbl">선택</span>
+    <span class="res-val rtag ${isGolf ? 'rtag-green' : ''}" style="padding:4px 12px;border-radius:99px;font-size:12px">${A['q-team'] || '—'}</span></div>`;
+
+  if (spots.size) {
+    document.getElementById('r-tour').style.display = 'block';
+    document.getElementById('r-tour').innerHTML = `
+      <div class="res-sec">관광지 선호도</div>
+      <div class="tags">${[...spots].map(s => `<span class="rtag">${s}</span>`).join('')}</div>`;
+  }
+  if (A.free) {
+    document.getElementById('r-free').style.display = 'block';
+    document.getElementById('r-free').innerHTML = `
+      <div class="res-sec">건의사항</div>
+      <p style="font-size:13px;color:var(--text);line-height:1.8">${A.free}</p>`;
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function restart() {
+  cur = 1; Object.keys(A).forEach(k => delete A[k]); spots.clear();
+  document.querySelectorAll('.sel-single,.sel-multi').forEach(e => e.classList.remove('sel-single','sel-multi'));
+  document.getElementById('q-free').value = '';
+  ['f-name','f-dept','f-dob'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('survey').style.display = 'block';
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('s1').classList.add('active');
+  updUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updUI();
+</script>
+</body>
+</html>
